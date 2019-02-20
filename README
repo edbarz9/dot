@@ -1,0 +1,4 @@
+I like to keep my most important dot file in $HOME/dot/ and simply symlink them where they should be:
+
+ln -s $HOME/dot/bashrc $HOME/.bashrc
+...
