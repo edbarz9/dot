@@ -1,0 +1,18 @@
+# Use Shift and arrows to switch panes
+bind -n S-Left select-pane -L
+bind -n S-Up select-pane -U
+bind -n S-Down select-pane -D
+bind -n S-Right select-pane -R
+
+# Set split keys
+bind-key m split-window -v
+bind-key l split-window -h
+
+bind-key Escape copy-mode
+bind-key p paste-buffer
+bind-key P choose-buffer
+
+# Easy config reload
+bind-key r source-file ~/dot/tmuxrc \
+
+set -g default-terminal "st-256color"
