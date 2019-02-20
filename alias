@@ -1,0 +1,222 @@
+#!/bin/bash
+
+alias t="tmux"
+alias n="noice"
+alias v="vim"
+alias svim="sudo vim"
+alias clr="clear"
+alias cls="clear && ls -a"
+alias lsl="echo 'ls -alh' && ls -alh"
+alias lsa="ls -a"
+
+function cs {
+    builtin cd "$@" && ls -a
+}
+
+function mkcd {
+    mkdir "$@" && builtin cd "$@"
+}
+
+alias cz="cd .. && ls -a"
+alias czz="cd ../.. && ls -a"
+alias czzz="cd ../../.. && ls -a"
+alias czzzz="cd ../../../.. && ls -a"
+alias cn="cd ~ && ls"
+alias cna="cd ~ && ls -a"
+alias ch="cd / && ls"
+alias gdt="cd ~/dot && ls"
+alias gdw="cd ~/down && ls"
+alias gdc="cd ~/doc && ls"
+alias gmu="cd ~/mu && ls"
+alias gcd="cd ~/code && ls"
+alias gbn="cd ~/code/bash/bin && ls"
+alias gpc="cd ~/pic && ls"
+alias gst="cd ~/studio && ls"
+alias gusb1="cd /media/usb1/"
+alias gusb2="cd /media/usb2/"
+alias qs="w3m http://lite.qwant.com"
+alias wat="waterfox"
+alias beaker="/opt/beaker-browser-0.8.0-x86_64.AppImage"
+alias yd="youtube-dl -f mp4"
+alias ymp3="youtube-dl -x --audio-format mp3 --audio-quality 0"
+alias gpg="gpg2"
+alias py="python3"
+alias pipin="sudo pip3 install"
+alias pipq="pip3 search"
+alias sp="sudo ping 1.1.1.1 -c 1"
+alias qw="vim $HOME/doc/ecriture/$(date +'%y%m%d')"
+alias tl="task list"
+alias ta="task add"
+function td {
+  task "$@" done
+}
+
+#dot files edit
+function dedit {
+  vim $HOME/dot/"$@"
+}
+
+complete -W "\`ls $HOME/dot/\`" dedit
+
+function mtm {
+  mv "$@" ~/mu/
+}
+
+##text compiling#################################################
+
+function mom2pdf {
+  FILE="$@"
+  PDF=$(echo "$FILE" | sed s/.mom/.pdf/)
+  groff -Tpdf -mom $FILE > $PDF
+}
+
+complete -W "\`ls *.mom\`" mom2pdf
+
+function tex2pdf {
+  FILE="$@"
+  BASE=$(echo "$FILE" | sed s/.tex//)
+  LOG=$BASE
+  LOG+=.log
+  AUX=$BASE
+  AUX+=.aux
+  pdflatex $FILE
+  rm $AUX
+  rm $LOG
+}
+
+complete -W "\`ls *.tex\`" tex2pdf
+
+##runit commands#################################################
+
+alias rs="sudo sv status /var/service/*"
+
+#runit service link (activate)
+function rsln {
+  sudo ln -s /etc/sv/"$@" /var/service/
+}
+
+#runit service remove
+function rsrm {
+  sudo rm -rf /var/service/"$@"
+}
+
+#runit service re-start
+function rsrs {
+  sudo sv restart "$@"
+}
+
+#runit service stop
+function rsst {
+  sudo sv stop "$@"
+}
+
+complete -W "\`ls /etc/sv/\`" rsln
+complete -W "\`ls /var/service/\`" rsrm
+complete -W "\`ls /var/service/\`" rsrs
+complete -W "\`ls /var/service/\`" rsst
+
+##xbps-tools####################################################
+
+alias xu="sudo xbps-install -Su"
+
+function xq {
+  xbps-query -Rs "$@"
+}
+
+function xi {
+	echo "$@" >> $HOME/log/installed
+  sudo xbps-install "$@"
+}
+
+function xr {
+  sudo xbps-remove -R "$@"
+}
+
+complete -W "\`ls $HOME/dot/xbps/void-packages/srcpkgs/ \`" xi
+complete -W "\`ls $HOME/dot/xbps/void-packages/srcpkgs/ \`" xr
+
+##formating######################################################
+
+alias unspace='for f in *" "* ; do mv "$f" "${f// /_}";done;'
+
+function batch_cap {
+  for f in *
+  do
+    mv "$f" $(echo "$f" | tr '[:lower:]' '[:upper:]')
+  done
+}
+
+function CAP {
+  UPPER=$(echo "$@" | tr '[:lower:]' '[:upper:]')
+  mv "$@" "${UPPER}"
+}
+
+function sharand {
+  for f in *
+    do
+      mv "$f" "$(sha1sum $f | awk '{print $1}')"
+    done
+}
+
+##mutli-media####################################################
+
+alias mpdf="mupdf"
+
+complete -W "\`ls *[p,P][d,D][f,F]\`" mpdf
+complete -W "\`ls *[mp4,mp3,wav,mkv,webm,flac]\`" mpv
+
+
+function ffmp3 {
+  BASE=$(echo "$@"|sed s/\.[a-z,0-9]+//)
+  ffmpeg -i "$@" -vn -ab 192k -ar 44100 -y "$BASE.mp3"
+}
+
+#batch edit mp3 title and track number tag
+#songs have to be in the following format:
+#'02 Title of the song.mp3'
+function tntag {
+  for track in *.mp3
+  do
+    TRACK_NUM=$(echo "$track" | awk '{print $1}')
+    TRACK_TITLE=$(echo "$track" | sed s/[0-9][0-9]\ //|sed s/\.mp3//)
+    eyeD3 -t "$TRACK_TITLE" -n "$TRACK_NUM" "$track"
+  done
+}
+
+function tag_clear {
+  eyeD3 --remove-all *.mp3
+}
+
+
+function ffmp4 {
+  ffmpeg -i "$@" -vn -y "$@.mp4"
+}
+
+##rss############################################################
+
+FEEDSPATH="$HOME/.sfeed"
+FEEDPATH="$FEEDSPATH/feeds.html" 
+
+alias checkrss="sfeed_html ${FEEDSPATH}/feeds/* > ${FEEDPATH} && w3m ${FEEDPATH}"
+
+##gnupg##########################################################
+
+DEFAULTGPGKEY=$(gpg --list-keys | awk '/pub /{getline; print $1}')
+
+function hide {
+  gpg -r ${DEFAULTGPGKEY} -e "$@" 
+  shred -u "$@"
+  mv "$@".gpg "$@"
+}
+
+function show {
+  gpg -d "$@" 
+}
+
+##simple man#####################################################
+
+function sman {
+  cat $HOME/dot/sman/"$@"
+}
+complete -W "\`ls $HOME/dot/sman/\`" sman
+
