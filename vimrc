@@ -43,22 +43,22 @@ nnoremap <leader>hl :nohls
 
 let g:languagetool_jar='/usr/local/share/language_tool/languagetool-commandline.jar'
 
-function! Smart_TabComplete()
-  let line = getline('.')
-  let substr = strpart(line, -1, col('.')+1)
-  let substr = matchstr(substr, "[^ \t]*$")
-  if (strlen(substr)==0)
-    return "\<tab>"
-  endif
-  let has_period = match(substr, '\.') != -1
-  let has_slash = match(substr, '\/') != -1
-  if (!has_period && !has_slash)
-    return "\<C-X>\<C-P>"
+"function! Smart_TabComplete()
+"  let line = getline('.')
+"  let substr = strpart(line, -1, col('.')+1)
+"  let substr = matchstr(substr, "[^ \t]*$")
+"  if (strlen(substr)==0)
+"    return "\<tab>"
+"  endif
+"  let has_period = match(substr, '\.') != -1
+"  let has_slash = match(substr, '\/') != -1
+"  if (!has_period && !has_slash)
+"    return "\<C-X>\<C-P>"
  " elseif ( has_slash )
-  else
-    return "\<C-X>\<C-F>"
-  endif
-endfunction
+"  else
+"    return "\<C-X>\<C-F>"
+"  endif
+"endfunction
 
 inoremap <tab> <c-r>=Smart_TabComplete()<CR>
 
@@ -83,7 +83,7 @@ so /home/ed/dot/vim/remaps/symb.vim
   nm <leader>i :call ToggleShortcut()<CR>
   imap <leader>i <esc>:call ToggleShortcut()<CR>a
  
-autocmd BufWritePost ~/dot/crontab.user-space !uscron-restart && ns "uscron re-confed"
+autocmd BufWritePost ~/dot/crontab.user-space !/usr/local/bin/uscron-restart && ns "uscron re-confed"
 autocmd BufWritePost ~/dot/crontab !sudo sv restart scron && ns "crontab re-confed"
 
 
