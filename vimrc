@@ -11,11 +11,12 @@ set relativenumber
 set incsearch
 set hlsearch
 set tabstop=2
-set softtabstop=0 
-set expandtab 
+set softtabstop=0
+set expandtab
 set shiftwidth=2
 set smarttab
 set clipboard=unnamedplus
+set shell=bash
 
 nnoremap tn :tabnew<Space>
 nnoremap tk :tabnext<CR>
@@ -60,7 +61,7 @@ let g:languagetool_jar='/usr/local/share/language_tool/languagetool-commandline.
 "  endif
 "endfunction
 
-inoremap <tab> <c-r>=Smart_TabComplete()<CR>
+"inoremap <tab> <c-r>=Smart_TabComplete()<CR>
 
 " Up and Down arrow keys move on display lines
 noremap <buffer> <silent> <Up> gk
@@ -82,8 +83,9 @@ au bufNewFile *.go 0r /home/ed/dot/vim/templates/base.go
 so /home/ed/dot/vim/remaps/symb.vim
   nm <leader>i :call ToggleShortcut()<CR>
   imap <leader>i <esc>:call ToggleShortcut()<CR>a
- 
+
 autocmd BufWritePost ~/dot/crontab.user-space !/usr/local/bin/uscron-restart && ns "uscron re-confed"
 autocmd BufWritePost ~/dot/crontab !sudo sv restart scron && ns "crontab re-confed"
 
-
+" remove trailing white space on save
+autocmd BufWritePre * :%s/\s\+$//e
