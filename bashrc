@@ -30,7 +30,7 @@ complete -W "\`grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' Makefile | sed 's/[^a-zA-Z0-9
 
 complete -W "\`ls -R /usr/share/man/ | sed 's/[.].*//' \`" man
 
-complete -W "commit\ -am push\ origin\ master add status log clone" git 
+#complete -W "commit\ -am push\ origin\ master add status log clone" git
 
 complete -cf sudo
 

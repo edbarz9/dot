@@ -195,7 +195,7 @@ function ffmp4 {
 ##rss############################################################
 
 FEEDSPATH="$HOME/.sfeed"
-FEEDPATH="$FEEDSPATH/feeds.html" 
+FEEDPATH="$FEEDSPATH/feeds.html"
 
 alias checkrss="sfeed_html ${FEEDSPATH}/feeds/* > ${FEEDPATH} && w3m ${FEEDPATH}"
 
@@ -204,13 +204,13 @@ alias checkrss="sfeed_html ${FEEDSPATH}/feeds/* > ${FEEDPATH} && w3m ${FEEDPATH}
 DEFAULTGPGKEY=$(gpg --list-keys | awk '/pub /{getline; print $1}')
 
 function hide {
-  gpg -r ${DEFAULTGPGKEY} -e "$@" 
+  gpg -r ${DEFAULTGPGKEY} -e "$@"
   shred -u "$@"
   mv "$@".gpg "$@"
 }
 
 function show {
-  gpg -d "$@" 
+  gpg -d "$@"
 }
 
 ##simple man#####################################################
@@ -219,4 +219,14 @@ function sman {
   cat $HOME/dot/sman/"$@"
 }
 complete -W "\`ls $HOME/dot/sman/\`" sman
+
+##git############################################################
+
+alias gc="git commit -am"
+alias gp="git push origin master"
+
+
+
+
+
 

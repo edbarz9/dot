@@ -1,2 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =0
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/home/ed/code/go/gets/src/github.com/rivo/tview/demos/inputfield'
+let g:netrw_dirhist_2='/home/ed/mu/GIRL_ARM'
+let g:netrw_dirhist_3='/home/ed'
+let g:netrw_dirhist_4='/home/ed/code/go/gets/src/github.com/rivo/tview/demos/treeview'
