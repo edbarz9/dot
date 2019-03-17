@@ -11,6 +11,8 @@ set -o vi
 export EDITOR="/usr/bin/vim"
 export TERM="st-256color"
 export GOPATH=$HOME/code/go/gets
+
+export PATH=$PATH:/home/ed/code/script/
 #export DBUS_SESSION_BUS_ADDRESS=$(getdbsba)
 
 source $HOME/dot/alias

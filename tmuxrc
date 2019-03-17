@@ -16,3 +16,5 @@ bind-key P choose-buffer
 bind-key r source-file ~/dot/tmuxrc \
 
 set -g default-terminal "st-256color"
+set -g prefix C-Space
+bind C-Space send-prefix

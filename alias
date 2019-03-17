@@ -38,17 +38,25 @@ alias qs="w3m http://lite.qwant.com"
 alias wat="waterfox"
 alias beaker="/opt/beaker-browser-0.8.0-x86_64.AppImage"
 alias yd="youtube-dl -f mp4"
+alias ydw="youtube-dl -f webm"
 alias ymp3="youtube-dl -x --audio-format mp3 --audio-quality 0"
+alias ytw="cd /tmp/ytdowns && sxiv -t *.jpg"
 alias gpg="gpg2"
 alias py="python3"
 alias pipin="sudo pip3 install"
 alias pipq="pip3 search"
 alias sp="sudo ping 1.1.1.1 -c 1"
-alias qw="vim $HOME/doc/ecriture/$(date +'%y%m%d')"
+#alias qw="vim $HOME/doc/ecriture/$(date +'%y%m%d')"
 alias tl="task list"
 alias ta="task add"
 function td {
   task "$@" done
+}
+
+function qw {
+  TWT=$(task due:today|grep "write"|awk '{print $1}')
+  task "${TWT}" done
+  vim $HOME/doc/ecriture/$(date +'%y%m%d')
 }
 
 #dot files edit
@@ -163,7 +171,7 @@ function sharand {
 alias mpdf="mupdf"
 
 complete -W "\`ls *[p,P][d,D][f,F]\`" mpdf
-complete -W "\`ls *[mp4,mp3,wav,mkv,webm,flac]\`" mpv
+complete -W "\`ls *[mp4,mp3,wav,mkv,webm,flac,avi]\`" mpv
 
 
 function ffmp3 {
@@ -225,7 +233,20 @@ complete -W "\`ls $HOME/dot/sman/\`" sman
 alias gc="git commit -am"
 alias gp="git push origin master"
 
-
+function audiobox-toggle {
+  MODE=$(cat $HOME/dot/asoundrc | grep "mode"|awk '{print $2}')
+  if [[ $MODE == "normal" ]]
+  then
+    echo '#mode audiobox
+defaults.pcm.card 1
+defaults.pcm.device 0
+defaults.ctl.card 1' > $HOME/dot/asoundrc
+    echo "Audiobox is on"
+  else
+    echo '#mode normal' > $HOME/dot/asoundrc
+    echo "Default audio driver is on"
+  fi
+}
 
 
 
