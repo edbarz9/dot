@@ -66,6 +66,13 @@ function dedit {
 
 complete -W "\`ls $HOME/dot/\`" dedit
 
+#script edit
+function sedit {
+  vim $HOME/code/script/"$@"
+}
+
+complete -W "\`ls $HOME/code/script/\`" sedit
+
 function mtm {
   mv "$@" ~/mu/
 }
@@ -172,7 +179,6 @@ alias mpdf="mupdf"
 
 complete -W "\`ls *[p,P][d,D][f,F]\`" mpdf
 complete -W "\`ls *[mp4,mp3,wav,mkv,webm,flac,avi]\`" mpv
-
 
 function ffmp3 {
   BASE=$(echo "$@"|sed s/\.[a-z,0-9]+//)
