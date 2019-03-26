@@ -29,12 +29,13 @@ alias gdw="cd ~/down && ls"
 alias gdc="cd ~/doc && ls"
 alias gmu="cd ~/mu && ls"
 alias gcd="cd ~/code && ls"
+alias gvd="cd ~/vid && ls"
 alias gbn="cd ~/code/bash/bin && ls"
 alias gpc="cd ~/pic && ls"
 alias gst="cd ~/studio && ls"
 alias gusb1="cd /media/usb1/"
 alias gusb2="cd /media/usb2/"
-alias qs="w3m http://lite.qwant.com"
+#alias qs="w3m http://lite.qwant.com"
 alias wat="waterfox"
 alias beaker="/opt/beaker-browser-0.8.0-x86_64.AppImage"
 alias yd="youtube-dl -f mp4"
@@ -46,7 +47,6 @@ alias py="python3"
 alias pipin="sudo pip3 install"
 alias pipq="pip3 search"
 alias sp="sudo ping 1.1.1.1 -c 1"
-#alias qw="vim $HOME/doc/ecriture/$(date +'%y%m%d')"
 alias tl="task list"
 alias ta="task add"
 function td {
@@ -56,6 +56,7 @@ function td {
 function qw {
   TWT=$(task due:today|grep "write"|awk '{print $1}')
   task "${TWT}" done
+  pomo 10&
   vim $HOME/doc/ecriture/$(date +'%y%m%d')
 }
 
@@ -81,7 +82,7 @@ function mtm {
 
 function mom2pdf {
   FILE="$@"
-  PDF=$(echo "$FILE" | sed s/.mom/.pdf/)
+  PDF=${FILE/.mom/.pdf}
   groff -Tpdf -mom $FILE > $PDF
 }
 
@@ -89,17 +90,37 @@ complete -W "\`ls *.mom\`" mom2pdf
 
 function tex2pdf {
   FILE="$@"
-  BASE=$(echo "$FILE" | sed s/.tex//)
-  LOG=$BASE
-  LOG+=.log
-  AUX=$BASE
-  AUX+=.aux
+  BASE=${FILE/.tex/}
+  LOG=$BASE.log
+  AUX=$BASE.aux
   pdflatex $FILE
   rm $AUX
   rm $LOG
 }
 
 complete -W "\`ls *.tex\`" tex2pdf
+
+LOCALTEX="/opt/texlive/texmf-local/tex/latex/local/"
+
+function texinstall {
+  NEWTEXPACK="$@"
+  if [[ $NEWTEXPACK == *.zip* ]]
+  then
+    unzip ${NEWTEXPACK}
+    NEWTEXPACK=${NEWTEXPACK/".zip"/}
+  fi
+  sudo cp -r ${NEWTEXPACK} ${LOCALTEX}
+  cd ${LOCALTEX}${NEWTEXPACK} && sudo texhash
+}
+
+function autotex {
+  #LATEXF="$@"
+  #PDF=${LATEXF/.tex/.pdf}
+  #ls *.tex | entr pdflatex ${LATEXF}; mupdf ${PDF}
+  ls *.tex | entr compiler "$@"
+}
+
+complete -W "\`ls *.tex\`" autotex
 
 ##runit commands#################################################
 
@@ -153,6 +174,13 @@ complete -W "\`ls $HOME/dot/xbps/void-packages/srcpkgs/ \`" xr
 ##formating######################################################
 
 alias unspace='for f in *" "* ; do mv "$f" "${f// /_}";done;'
+
+function disambiguate {
+  FILE="$@"
+  CLEANNAME=$(echo $FILE |sed s/"'"//|sed 's/\"//g'|sed "s/ /_/g")
+  mv "${FILE}" "${CLEANNAME}"
+
+}
 
 function batch_cap {
   for f in *
@@ -254,6 +282,15 @@ defaults.ctl.card 1' > $HOME/dot/asoundrc
   fi
 }
 
-
-
-
+function qs {
+  QWANTBASE="https://lite.qwant.com/?q="
+  QWANTQUE="&t=web"
+  QUERY=""
+  for i in "$@"
+  do
+    QUERY=${QUERY}+$i
+  done
+  QUERY=$(echo ${QUERY}| sed 's/^+//')
+  URL=${QWANTBASE}${QUERY}${QWANTQUE}
+  w3m ${URL}
+}
