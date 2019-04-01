@@ -29,7 +29,6 @@ alias gdw="cd ~/down && ls"
 alias gdc="cd ~/doc && ls"
 alias gmu="cd ~/mu && ls"
 alias gcd="cd ~/code && ls"
-alias gvd="cd ~/vid && ls"
 alias gbn="cd ~/code/bash/bin && ls"
 alias gpc="cd ~/pic && ls"
 alias gst="cd ~/studio && ls"
@@ -47,6 +46,7 @@ alias py="python3"
 alias pipin="sudo pip3 install"
 alias pipq="pip3 search"
 alias sp="sudo ping 1.1.1.1 -c 1"
+#alias qw="vim $HOME/doc/ecriture/$(date +'%y%m%d')"
 alias tl="task list"
 alias ta="task add"
 function td {
@@ -56,7 +56,6 @@ function td {
 function qw {
   TWT=$(task due:today|grep "write"|awk '{print $1}')
   task "${TWT}" done
-  pomo 10&
   vim $HOME/doc/ecriture/$(date +'%y%m%d')
 }
 
@@ -67,13 +66,6 @@ function dedit {
 
 complete -W "\`ls $HOME/dot/\`" dedit
 
-#script edit
-function sedit {
-  vim $HOME/code/script/"$@"
-}
-
-complete -W "\`ls $HOME/code/script/\`" sedit
-
 function mtm {
   mv "$@" ~/mu/
 }
@@ -82,7 +74,7 @@ function mtm {
 
 function mom2pdf {
   FILE="$@"
-  PDF=${FILE/.mom/.pdf}
+  PDF=$(echo "$FILE" | sed s/.mom/.pdf/)
   groff -Tpdf -mom $FILE > $PDF
 }
 
@@ -90,37 +82,17 @@ complete -W "\`ls *.mom\`" mom2pdf
 
 function tex2pdf {
   FILE="$@"
-  BASE=${FILE/.tex/}
-  LOG=$BASE.log
-  AUX=$BASE.aux
+  BASE=$(echo "$FILE" | sed s/.tex//)
+  LOG=$BASE
+  LOG+=.log
+  AUX=$BASE
+  AUX+=.aux
   pdflatex $FILE
   rm $AUX
   rm $LOG
 }
 
 complete -W "\`ls *.tex\`" tex2pdf
-
-LOCALTEX="/opt/texlive/texmf-local/tex/latex/local/"
-
-function texinstall {
-  NEWTEXPACK="$@"
-  if [[ $NEWTEXPACK == *.zip* ]]
-  then
-    unzip ${NEWTEXPACK}
-    NEWTEXPACK=${NEWTEXPACK/".zip"/}
-  fi
-  sudo cp -r ${NEWTEXPACK} ${LOCALTEX}
-  cd ${LOCALTEX}${NEWTEXPACK} && sudo texhash
-}
-
-function autotex {
-  #LATEXF="$@"
-  #PDF=${LATEXF/.tex/.pdf}
-  #ls *.tex | entr pdflatex ${LATEXF}; mupdf ${PDF}
-  ls *.tex | entr compiler "$@"
-}
-
-complete -W "\`ls *.tex\`" autotex
 
 ##runit commands#################################################
 
@@ -177,9 +149,8 @@ alias unspace='for f in *" "* ; do mv "$f" "${f// /_}";done;'
 
 function disambiguate {
   FILE="$@"
-  CLEANNAME=$(echo $FILE |sed s/"'"//|sed 's/\"//g'|sed "s/ /_/g")
+  CLEANNAME=$(echo $FILE |sed s/"'"//g|sed 's/\"//g'|sed "s/ /_/g")
   mv "${FILE}" "${CLEANNAME}"
-
 }
 
 function batch_cap {
@@ -207,6 +178,7 @@ alias mpdf="mupdf"
 
 complete -W "\`ls *[p,P][d,D][f,F]\`" mpdf
 complete -W "\`ls *[mp4,mp3,wav,mkv,webm,flac,avi]\`" mpv
+
 
 function ffmp3 {
   BASE=$(echo "$@"|sed s/\.[a-z,0-9]+//)
@@ -284,13 +256,18 @@ defaults.ctl.card 1' > $HOME/dot/asoundrc
 
 function qs {
   QWANTBASE="https://lite.qwant.com/?q="
-  QWANTQUE="&t=web"
+  QWANT_EOQ="&t=web"
   QUERY=""
   for i in "$@"
   do
     QUERY=${QUERY}+$i
   done
   QUERY=$(echo ${QUERY}| sed 's/^+//')
-  URL=${QWANTBASE}${QUERY}${QWANTQUE}
+  URL=${QWANTBASE}${QUERY}${QWANT_EOQ}
   w3m ${URL}
 }
+
+alias gti="cd /media/usb1/newtune/iTunes\ off/iTunes\ Media/Music"
+alias dup="st-82&"
+
+

@@ -86,6 +86,7 @@ so /home/ed/dot/vim/remaps/symb.vim
 
 autocmd BufWritePost ~/dot/crontab.user-space !/usr/local/bin/uscron-restart && ns "uscron re-confed"
 autocmd BufWritePost ~/dot/crontab !sudo sv restart scron && ns "crontab re-confed"
+" autocmd BufWritePost *.tex !sudo sv restart scron
 
 " remove trailing white space on save
 autocmd BufWritePre * :%s/\s\+$//e
