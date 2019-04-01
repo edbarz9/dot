@@ -27,6 +27,7 @@ alias ch="cd / && ls"
 alias gdt="cd ~/dot && ls"
 alias gdw="cd ~/down && ls"
 alias gdc="cd ~/doc && ls"
+alias gvd="cd ~/vid &&ls"
 alias gmu="cd ~/mu && ls"
 alias gcd="cd ~/code && ls"
 alias gcdp="cd ~/code/python && ls"
@@ -61,6 +62,7 @@ function td {
 function qw {
   TWT=$(task due:today|grep "write"|awk '{print $1}')
   task "${TWT}" done
+  pomo 10&
   vim $HOME/doc/ecriture/$(date +'%y%m%d')
 }
 
