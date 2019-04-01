@@ -66,6 +66,12 @@ function dedit {
 
 complete -W "\`ls $HOME/dot/\`" dedit
 
+function sedit {
+  vim $HOME/code/script/"$@"
+}
+
+complete -W "\`ls $HOME/code/script/\`" sedit
+
 function mtm {
   mv "$@" ~/mu/
 }
