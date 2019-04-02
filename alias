@@ -27,6 +27,8 @@ alias ch="cd / && ls"
 alias gdt="cd ~/dot && ls"
 alias gdw="cd ~/down && ls"
 alias gdc="cd ~/doc && ls"
+alias gdcm="cd ~/doc/math && ls"
+alias gdcs="cd ~/doc/screeplay && ls"
 alias gvd="cd ~/vid &&ls"
 alias gmu="cd ~/mu && ls"
 alias gcd="cd ~/code && ls"
@@ -35,6 +37,9 @@ alias gcdpp="cd ~/code/python/play && ls"
 alias gcdc="cd ~/code/C && ls"
 alias gcdg="cd ~/code/go && ls"
 alias gcdw="cd ~/code/web && ls"
+alias gcdr="cd ~/code/repo && ls"
+alias gcds="cd ~/code/script && ls"
+alias gcdsql="cd ~/code/SQL && ls"
 alias gbn="cd ~/code/bash/bin && ls"
 alias gpc="cd ~/pic && ls"
 alias gst="cd ~/studio && ls"
@@ -103,6 +108,19 @@ function tex2pdf {
   pdflatex $FILE
   rm $AUX
   rm $LOG
+}
+
+function tex2pdfshow {
+  FILE="$@"
+  BASE=$(echo "$FILE" | sed s/.tex//)
+  LOG=$BASE
+  LOG+=.log
+  AUX=$BASE
+  AUX+=.aux
+  pdflatex $FILE
+  rm $AUX
+  rm $LOG
+  mpdf $BASE.pdf
 }
 
 complete -W "\`ls *.tex\`" tex2pdf
